@@ -36,7 +36,7 @@ class User(object):
         'last_name': 'str',
         'email': 'str',
         'time_zone': 'str',
-        'jti': 'str'
+        'user_token': 'str'
     }
 
     attribute_map = {
@@ -45,10 +45,10 @@ class User(object):
         'last_name': 'last_name',
         'email': 'email',
         'time_zone': 'time_zone',
-        'jti': 'jti'
+        'user_token': 'user_token'
     }
 
-    def __init__(self, id=None, first_name=None, last_name=None, email=None, time_zone=None, jti=None):
+    def __init__(self, id=None, first_name=None, last_name=None, email=None, time_zone=None, user_token=None):
         """
         User - a model defined in Swagger
         """
@@ -58,7 +58,7 @@ class User(object):
         self._last_name = None
         self._email = None
         self._time_zone = None
-        self._jti = None
+        self._user_token = None
 
         if id is not None:
           self.id = id
@@ -70,8 +70,8 @@ class User(object):
           self.email = email
         if time_zone is not None:
           self.time_zone = time_zone
-        if jti is not None:
-          self.jti = jti
+        if user_token is not None:
+          self.user_token = user_token
 
     @property
     def id(self):
@@ -179,25 +179,25 @@ class User(object):
         self._time_zone = time_zone
 
     @property
-    def jti(self):
+    def user_token(self):
         """
-        Gets the jti of this User.
+        Gets the user_token of this User.
 
-        :return: The jti of this User.
+        :return: The user_token of this User.
         :rtype: str
         """
-        return self._jti
+        return self._user_token
 
-    @jti.setter
-    def jti(self, jti):
+    @user_token.setter
+    def user_token(self, user_token):
         """
-        Sets the jti of this User.
+        Sets the user_token of this User.
 
-        :param jti: The jti of this User.
+        :param user_token: The user_token of this User.
         :type: str
         """
 
-        self._jti = jti
+        self._user_token = user_token
 
     def to_dict(self):
         """

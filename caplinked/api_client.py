@@ -17,9 +17,12 @@ import json
 import mimetypes
 import tempfile
 import threading
+import time
+import hmac
+import hashlib
 
 from datetime import date, datetime
-
+from pprint import pprint
 # python 2 and python 3 compatibility library
 from six import PY3, integer_types, iteritems, text_type
 from six.moves.urllib.parse import quote
@@ -74,6 +77,8 @@ class ApiClient(object):
         self.cookie = cookie
         # Set default User-Agent.
         self.user_agent = 'Swagger-Codegen/1.0.0/python'
+        self._api_secret_key = None
+
 
     @property
     def user_agent(self):
@@ -89,6 +94,47 @@ class ApiClient(object):
         """
         self.default_headers['User-Agent'] = value
 
+    @property
+    def api_key(self):
+        """
+        Gets api key.
+        """
+        return self.default_headers['x-api-key']
+
+    @api_key.setter
+    def api_key(self, value):
+        """
+        Sets api key.
+        """
+        self.default_headers['x-api-key'] = value
+    @property
+    def api_secret_key(self):
+        """
+        Gets api secret key.
+        """
+        return self._api_secret_key
+
+    @api_secret_key.setter
+    def api_secret_key(self, value):
+        """
+        Sets api secret key.
+        """
+        self._api_secret_key = value
+
+    @property
+    def api_user_token(self):
+        """
+        Gets api user token.
+        """
+        return self.default_headers['x-api-user-token']
+
+    @api_user_token.setter
+    def api_user_token(self, value):
+        """
+        Sets api user token.
+        """
+        self.default_headers['x-api-user-token'] = value
+
     def set_default_header(self, header_name, header_value):
         self.default_headers[header_name] = header_value
 
@@ -100,16 +146,25 @@ class ApiClient(object):
                    _request_timeout=None):
 
         config = Configuration()
-
         # header parameters
         header_params = header_params or {}
         header_params.update(self.default_headers)
+
         if self.cookie:
             header_params['Cookie'] = self.cookie
         if header_params:
             header_params = self.sanitize_for_serialization(header_params)
             header_params = dict(self.parameters_to_tuples(header_params,
                                                            collection_formats))
+        # Sign Caplinked requests
+        if self.api_key is not None and self.api_secret_key is not None and self.api_user_token is not None:
+            header_params['x-api-key'] = self.api_key
+            header_params['x-api-user-token'] = self.api_user_token
+            expiration = int(time.time()+300)
+            body = str(self.api_key) + str(self.api_user_token) + str(expiration)
+            digest = hmac.new(str(self.api_secret_key), body, digestmod=hashlib.sha256).hexdigest()
+            header_params['x-api-signature'] = "Method=HMAC-SHA256 Signature=" + digest
+            header_params['x-api-exp-date'] = expiration
 
         # path parameters
         if path_params:

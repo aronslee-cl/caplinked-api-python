@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **last_name** | **str** |  | [optional] 
 **email** | **str** |  | [optional] 
 **time_zone** | **str** |  | [optional] 
-**jti** | **str** |  | [optional] 
+**user_token** | **str** |  | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
