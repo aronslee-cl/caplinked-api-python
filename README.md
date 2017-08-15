@@ -62,7 +62,7 @@ api_instance = caplinked.UsersApi(client)
 
 try:
     # Get user information
-		api_response = api_instance.get_users_me()
+    api_response = api_instance.get_users_me()
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling UsersApi->get_users_me: %s\n" % e)
